@@ -59,7 +59,7 @@ def write_tsv(output_stream, *tup):
     Write argument list in `tup` out as a tab-separeated row to the stream.
     """
     value = '\t'.join([s for s in tup]) + '\n'
-    output_stream.write(str(value))
+    output_stream.write(value.encode('utf8'))
 
 
 def iter_tsv(input_stream, cols=None):
@@ -83,10 +83,10 @@ def iter_tsv(input_stream, cols=None):
                 for c in cols]
         Record = collections.namedtuple('Record', cols)
         for line in input_stream:
-            yield Record._make(str(line).rstrip('\n').split('\t'))
+            yield Record._make(line.decode('utf8').rstrip('\n').split('\t'))
     else:
         for line in input_stream:
-            yield tuple(str(line).rstrip('\n').split('\t'))
+            yield tuple(line.decode('utf8').rstrip('\n').split('\t'))
 
 
 class TSVFormat(luigi.format.Format):
